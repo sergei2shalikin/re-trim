@@ -20,8 +20,8 @@
             </section>
             <section class="card-number">
               <input
-                :value="maskCardNumber"
-                @input="handleInputCardField('number', $event)"
+                :value="maskCardNumber(cardData.number)"
+                @input="(e) => handleInputCardField('number', e)"
                 class="number-input"
                 placeholder="0000  0000  0000  0000"
                 minlength="22"
@@ -106,7 +106,7 @@
 <script setup lang="ts">
 import CardSignal from "@/assets/icon/card-signal.vue";
 import CardChip from "@/assets/icon/card-chip.vue";
-import { computed, reactive, ref, toRefs } from "vue";
+import { reactive, ref, toRefs } from "vue";
 import PersonComponent from "@/components/PersonComponent.vue";
 
 var cardFrontActive = ref(true);
@@ -126,30 +126,27 @@ var cardData = reactive<{
   yearExpired: "",
 });
 
-var maskCardNumber = computed(() => {
-  var { number } = toRefs(cardData);
-  var numbersStr = number.value.replace(/\s+/g, "");
+var maskCardNumber = (values: string) => {
+  var numbersStr = values.replace(/\s+/g, "");
   var result = "";
-  var temp = [...numbersStr].reduce(
-    (nums: string[], num: string, i: number) => {
-      result = result + num;
-      if ((i + 1) % 4 === 0) {
-        result = result + "  ";
-      }
-      return nums;
-    },
-    []
-  );
+  [...numbersStr].reduce((nums: string[], num: string, i: number) => {
+    result = result + num;
+    if ((i + 1) % 4 === 0) {
+      result = result + "  ";
+    }
+    return nums;
+  }, []);
   return result.trim();
-});
+};
 
 function handleInputCardField(field: string, event: Event) {
   var { number, firstName, lastName, monthExpired, yearExpired, cvc } =
     toRefs(cardData);
+  event.preventDefault();
   var target = event.target as HTMLInputElement;
   if (field === "number") {
     number.value = target.value;
-    number.value = number.value.replace(/[^0-9,\s]/g, "").trim();
+    number.value = target.value.replace(/[^0-9,\s]/g, "").trim();
     cardData.number = number.value;
   } else if (field === "firstName") {
     firstName.value = target.value;
@@ -260,7 +257,7 @@ var handleClickOnCard = (val: string) => {
   align-items: center;
 }
 .card-number {
-  font-family: "Arial Rounded MT Bold";
+  font-family: "Arial Rounded MT Bold", sans-serif;
   font-size: 22px;
 }
 .inner-wrapper {
@@ -275,7 +272,7 @@ var handleClickOnCard = (val: string) => {
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  font-family: "Arial Rounded MT Bold";
+  font-family: "Arial Rounded MT Bold", sans-serif;
   font-size: 18px;
 }
 .card-customer {

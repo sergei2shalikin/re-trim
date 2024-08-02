@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, defineProps } from "vue";
 import CloseIcon from "@/assets/icon/close-icon.vue";
 import fetchAbort from "@/fetchAbort";
 
@@ -52,7 +52,7 @@ var modalOpen = ref(false);
 var personItem = ref();
 var isVisible = ref<boolean>(false);
 var personInfoLoaded = ref<boolean>(false);
-var personInfo = ref<any>(null);
+var personInfo = ref<unknown>(null);
 
 onMounted(() => {
   const observer = new IntersectionObserver(handleIntersectionObserver, {
@@ -92,8 +92,8 @@ function handleIntersectionObserver(entries: IntersectionObserverEntry[]) {
 <style scoped>
 .modal-wrapper {
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   z-index: 90;
@@ -115,9 +115,9 @@ function handleIntersectionObserver(entries: IntersectionObserverEntry[]) {
   transform: translate(-50%, -50%);
   padding: 25px;
   border-radius: 15px;
-  -webkit-box-shadow: 0px 2px 41px -13px rgba(143, 141, 143, 1);
-  -moz-box-shadow: 0px 2px 41px -13px rgba(143, 141, 143, 1);
-  box-shadow: 0px 2px 41px -13px rgba(143, 141, 143, 1);
+  -webkit-box-shadow: 0 2px 41px -13px rgba(143, 141, 143, 1);
+  -moz-box-shadow: 0 2px 41px -13px rgba(143, 141, 143, 1);
+  box-shadow: 0 2px 41px -13px rgba(143, 141, 143, 1);
 }
 .header-modal {
   display: flex;
